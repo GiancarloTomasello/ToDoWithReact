@@ -4,9 +4,22 @@ import ToDoForm from "./components/ToDoForm";
 import { useState } from "react";
 import { nanoid } from "nanoid";
 
+const FILTER_MAP  = {
+    All: () => true,
+    Active: (task) => !task.completed,
+    Completed: (task) => task.completed,
+};
+const FILTER_NAMES = Object.keys(FILTER_MAP);
+
+console.log(FILTER_NAMES);
+
 function App(props){
     const [tasks, setTasks] = useState(props.tasks);
+    const [filter, setFilter] = useState("All");
 
+
+
+    
     function addTask(name){
         const newTask = {id: `todo-${nanoid()}`, name, completed:false};
         setTasks([...tasks, newTask]);
@@ -26,7 +39,7 @@ function App(props){
         const remainingTasks = tasks.filter((task) => id !== task.id);
         setTasks(remainingTasks);
     }
-
+    
     function editTask(id, newName){
         const updatedTasks = tasks.map((task) => {
             if(id === task.id){
@@ -37,7 +50,9 @@ function App(props){
         setTasks(updatedTasks);
     }
     
-    const taskList = tasks?.map((task) =>  (
+    const taskList = tasks
+    .filter(FILTER_MAP[filter])
+    .map((task) =>  (
         <Todo 
         id={task.id} 
         name={task.name} 
@@ -49,6 +64,12 @@ function App(props){
         />
     ));
 
+
+
+    const filterList = FILTER_NAMES.map((name) => {
+        <FilterButton key={name} name={name} isPressed={name === filter} setFilter={setFilter}/>
+    })
+
     const taskNoun = taskList !==1 ? "tasks" : "task";
     const headingText = `${taskList.length} ${taskNoun} remaining`;
 
@@ -57,11 +78,7 @@ function App(props){
             <div className="Todoapp stack-large">
                 <h1>TO DO App</h1>
                 <ToDoForm addTask={addTask}/>
-                <div className="filters btn-group stack-exception">
-                    <FilterButton fltrType="All" pressed/>
-                    <FilterButton fltrType="Active"/>
-                    <FilterButton fltrType="Completed"/>
-                </div>
+                <div className="filters btn-group stack-exception">{filterList}</div>
                 <h2 id="list-heading">{headingText}</h2>
                 <ul
                 role="list"
