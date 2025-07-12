@@ -12,13 +12,9 @@ const FILTER_MAP  = {
 
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
-
 function App(props){
     const [tasks, setTasks] = useState(props.tasks);
     const [filter, setFilter] = useState("All");
-
-
-
     
     function addTask(name){
         const newTask = {id: `todo-${nanoid()}`, name, completed:false};
@@ -68,8 +64,6 @@ function App(props){
     const filterList = FILTER_NAMES.map((name) => {
         return <FilterButton key={name} name={name} isPressed={name == filter} setFilter={setFilter}/>
     })
-
-    console.log(filterList);
 
     const taskNoun = taskList !==1 ? "tasks" : "task";
     const headingText = `${taskList.length} ${taskNoun} remaining`;
