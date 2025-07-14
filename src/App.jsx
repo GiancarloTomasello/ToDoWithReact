@@ -3,6 +3,7 @@ import Todo from "./components/Todo";
 import ToDoForm from "./components/ToDoForm";
 import { useState, useRef, useEffect } from "react";
 import { nanoid } from "nanoid";
+import { getItem, setItem} from "./utils/localStorage"
 
 function usePrevious(value){
     const ref = useRef();
@@ -20,14 +21,22 @@ const FILTER_MAP  = {
 
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
-function App(props){
-    const [tasks, setTasks] = useState(props.tasks);
+function App(){
+    const [tasks, setTasks] = useState( () => {
+        const item = getItem("taskList");
+        return item || [];
+    });
     const [filter, setFilter] = useState("All");
     
     function addTask(name){
         const newTask = {id: `todo-${nanoid()}`, name, completed:false};
         setTasks([...tasks, newTask]);
     }
+
+    //Runs everyime a change has been made to its dependents (tasks)
+    useEffect(() => {
+        setItem("taskList", tasks);
+    },[tasks])
     
     function toggleTaskCompleted(id){
         const updatedTasks = tasks.map((task) => {
