@@ -1,8 +1,16 @@
 import FilterButton from "./components/FilterButton";
 import Todo from "./components/Todo";
 import ToDoForm from "./components/ToDoForm";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { nanoid } from "nanoid";
+
+function usePrevious(value){
+    const ref = useRef();
+    useEffect(() => {
+        ref.current = value;
+    });
+    return ref.current;
+}
 
 const FILTER_MAP  = {
     All: () => true,
@@ -68,13 +76,21 @@ function App(props){
     const taskNoun = taskList !==1 ? "tasks" : "task";
     const headingText = `${taskList.length} ${taskNoun} remaining`;
 
+    const listHeadingRef = useRef(null);
+    const prevTaskLength = usePrevious(tasks.length);
+    useEffect(() => {
+        if(tasks.length < prevTaskLength){
+            listHeadingRef.current.focus();
+        }
+    }, [tasks.length, prevTaskLength]);
+
     return (
         <>
             <div className="Todoapp stack-large">
                 <h1>TO DO App</h1>
                 <ToDoForm addTask={addTask}/>
                 <div className="filters btn-group stack-exception">{filterList}</div>
-                <h2 id="list-heading">{headingText}</h2>
+                <h2 id="list-heading" tabIndex="-1" ref={listHeadingRef}>{headingText}</h2>
                 <ul
                 role="list"
                 className="todo-list stack-large stack-exception"
