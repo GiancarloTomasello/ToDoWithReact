@@ -4,6 +4,7 @@ import ToDoForm from "./components/ToDoForm";
 import { useState, useRef, useEffect } from "react";
 import { nanoid } from "nanoid";
 import { getItem, setItem} from "./utils/localStorage"
+import axios from 'axios';
 
 function usePrevious(value){
     const ref = useRef();
@@ -31,6 +32,17 @@ function App(){
     function addTask(name){
         const newTask = {id: `todo-${nanoid()}`, name, completed:false};
         setTasks([...tasks, newTask]);
+        const {data} = axios.post('http://localhost:3000/addTask', {
+            Task: newTask.name,
+            Task_Type: "None", 
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            }
+        }).then(function (response){
+            console.log(response);
+        })
     }
 
     //Runs everyime a change has been made to its dependents (tasks)
