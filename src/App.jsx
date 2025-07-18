@@ -31,8 +31,7 @@ function App(){
     
     function addTask(name){
         const newTask = {id: `todo-${nanoid()}`, name, completed:false};
-        setTasks([...tasks, newTask]);
-        const {data} = axios.post('http://localhost:3000/addTask', {
+        axios.post('http://localhost:3000/addTask', {
             Task: newTask.name,
             Task_Type: "None", 
         }, {
@@ -41,7 +40,11 @@ function App(){
                 'Access-Control-Allow-Origin': '*'
             }
         }).then(function (response){
-            console.log(response);
+            console.log(response.data.insertId);
+            //console.log("New id is= "+response.insertedId);
+            newTask.DataBaseId=response.data.insertId;
+            //console.log("test dbID " + newTask.DataBaseId);
+            setTasks([...tasks, newTask]);
         })
     }
 
@@ -61,7 +64,24 @@ function App(){
     }
     
     function deleteTask(id){
-        const remainingTasks = tasks.filter((task) => id !== task.id);
+        const remainingTasks = tasks.filter((task) =>{
+            if(id === task.id){
+                console.log("Print databaseID: "+ task.DataBaseId);
+                axios.delete(`http://localhost:3000/deleteTask:${task.DataBaseId}`)
+                    .then(response => {
+                        console.log("Resource deleted succesfully", response);
+                        console.log("SUCCESFUL RETURN THE TASKS");
+                    }).catch(error =>{
+                        console.log("error deleting resource ", error);
+                        console.log("FAILED RETURN THE TASKS")
+                        return task;
+                    })
+                //Here call api to delete task from db
+                //console.log("Id of deleted task is: " + task.DataBaseId);
+            }else{
+                return task;
+            }
+        });
         setTasks(remainingTasks);
     }
     

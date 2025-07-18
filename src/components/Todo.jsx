@@ -27,7 +27,7 @@ function Todo(props) {
         setEditing(false);
     }
 
-    console.log(editButtonRef.current);
+    //console.log(editButtonRef.current);
 
     const editingTemplate = (
         <form className="stack-small" onSubmit={handleSubmit}>
