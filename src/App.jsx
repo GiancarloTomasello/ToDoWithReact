@@ -3,7 +3,6 @@ import Todo from "./components/Todo";
 import ToDoForm from "./components/ToDoForm";
 import { useState, useRef, useEffect } from "react";
 import { nanoid } from "nanoid";
-import { getItem, setItem} from "./utils/localStorage"
 import axios from 'axios';
 
 //Note to self: google "set inital use state with an async function"
@@ -87,6 +86,22 @@ function App(){
         function toggleTaskCompleted(id){
             const updatedTasks = tasks.map((task) => {
                 if(id===task.id){
+                    //Update DB
+                    axios.put('http://localhost:3000/completeTask', {
+                        databaseId: task.databaseId,
+                        completed: !task.completed
+                    }, {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Access-Control-Allow-Origin': '*'
+                        }
+                    }).then((response) => {
+                        console.log("Post request finished");
+                        console.log(response);
+                    }).catch((error) =>{
+                        console.log(error);
+                    })
+                    //Update UI
                     return {...task, completed: !task.completed};
                 }
                 return task;
