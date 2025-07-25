@@ -40,7 +40,24 @@ export async function completeTaskInDB(task) {
     }).then((response) => {
         console.log("Post request finished");
         console.log(response);
-    }).catch((error) =>{
+    }).catch((error) => {
+        console.log(error);
+    })
+}
+
+export async function updateTaskInDB(task){
+    axios.put('http://localhost:3000/editTask', {
+        databaseId: task.databaseId,
+        task: task.name
+    }, {
+        headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        }
+    }).then((response) => {
+        console.log("Task edit saved")
+        console.log(response);
+    }).catch((error) => {
         console.log(error);
     })
 }

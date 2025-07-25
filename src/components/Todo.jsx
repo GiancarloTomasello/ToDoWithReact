@@ -21,7 +21,7 @@ function Todo(props) {
     }
 
     function handleSubmit(e){
-        e.preventDefaultf();
+        e.preventDefault();
         props.editTask(props.id, newName);
         setNewName("");
         setEditing(false);

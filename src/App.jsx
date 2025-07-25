@@ -3,7 +3,7 @@ import Todo from "./components/Todo";
 import ToDoForm from "./components/ToDoForm";
 import { useState, useRef, useEffect } from "react";
 import { nanoid } from "nanoid";
-import {getTasks, SaveNewTask, completeTaskInDB, deleteTaskInDB} from "./utils/dbInteraction" 
+import * as db from "./utils/dbInteraction" 
 
 //Note to self: google "set inital use state with an async function"
 
@@ -35,7 +35,7 @@ function App(){
     useEffect(() => {
         const loadDBTasks = async () => {
             //axios get
-            const data = await getTasks();
+            const data = await db.getTasks();
             const savedTaskList = data.map(dbTask => {
                 const task = {
                     id: dbTask.component_id,
@@ -56,7 +56,7 @@ function App(){
     async function addTask(name){
         const newTask = {id: `todo-${nanoid()}`, name, completed:false};
         //Axios post
-        await SaveNewTask(newTask)
+        await db.SaveNewTask(newTask)
         setTasks([...tasks, newTask]);        
     }
 
@@ -68,7 +68,7 @@ function App(){
             const updatedTasks = tasks.map((task) => {
                 if(id===task.id){
                     //Update DB
-                    completeTaskInDB(task);
+                    db.completeTaskInDB(task);
                     //Update UI
                     return {...task, completed: !task.completed};
                 }
@@ -82,7 +82,7 @@ function App(){
                 if(id === task.databaseId){
                     console.log("Print databaseId: "+ task.databaseId);
                    //db delete
-                   deleteTaskInDB(task);
+                   db.deleteTaskInDB(task);
                 }else{
                     return task;
                 }
@@ -93,7 +93,10 @@ function App(){
         function editTask(id, newName){
             const updatedTasks = tasks.map((task) => {
                 if(id === task.id){
-                    return {...task, name: newName}
+                    //db updateTask
+                    task.name = newName;
+                    db.updateTaskInDB(task);
+                    return task;
                 }
                 return task;
             })
