@@ -3,7 +3,7 @@ import Todo from "./components/Todo";
 import ToDoForm from "./components/ToDoForm";
 import { useState, useRef, useEffect } from "react";
 import { nanoid } from "nanoid";
-import axios from 'axios';
+import {getTasks, SaveNewTask, completeTaskInDB, deleteTaskInDB} from "./utils/dbInteraction" 
 
 //Note to self: google "set inital use state with an async function"
 
@@ -24,15 +24,7 @@ const FILTER_MAP  = {
 
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
- async function getTasks(){
-    try{
-        const test = await axios.get(`http://localhost:3000/getTasks`)
-        //console.log(test.data);
-        return test.data;
-    }catch(error){
-        console.log(error);
-    }
-}
+
 
 function App(){
     const [tasks, setTasks] = useState([]);
@@ -42,6 +34,7 @@ function App(){
     //Use Effect with no dependnecies run once after initial render
     useEffect(() => {
         const loadDBTasks = async () => {
+            //axios get
             const data = await getTasks();
             const savedTaskList = data.map(dbTask => {
                 const task = {
@@ -60,24 +53,11 @@ function App(){
         loadDBTasks();
     }, []);
     
-    function addTask(name){
+    async function addTask(name){
         const newTask = {id: `todo-${nanoid()}`, name, completed:false};
-        axios.post('http://localhost:3000/addTask', {
-            component_id: newTask.id,
-            Task: newTask.name,
-            Task_Type: "None",
-        }, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            }
-        }).then(function (response){
-            console.log(response.data.insertId);
-            //console.log("New id is= "+response.insertedId);
-            newTask.databaseId=response.data.insertId;
-            //console.log("test dbID " + newTask.databaseId);
-            setTasks([...tasks, newTask]);
-        })
+        //Axios post
+        await SaveNewTask(newTask)
+        setTasks([...tasks, newTask]);        
     }
 
     //everytime the task list changes filter the list
@@ -88,20 +68,7 @@ function App(){
             const updatedTasks = tasks.map((task) => {
                 if(id===task.id){
                     //Update DB
-                    axios.put('http://localhost:3000/completeTask', {
-                        databaseId: task.databaseId,
-                        completed: !task.completed
-                    }, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Access-Control-Allow-Origin': '*'
-                        }
-                    }).then((response) => {
-                        console.log("Post request finished");
-                        console.log(response);
-                    }).catch((error) =>{
-                        console.log(error);
-                    })
+                    completeTaskInDB(task);
                     //Update UI
                     return {...task, completed: !task.completed};
                 }
@@ -114,13 +81,8 @@ function App(){
             const remainingTasks = tasks.filter((task) =>{
                 if(id === task.databaseId){
                     console.log("Print databaseId: "+ task.databaseId);
-                    axios.delete(`http://localhost:3000/deleteTask:${task.databaseId}`)
-                        .then(response => {
-                            console.log("Resource deleted succesfully", response);
-                        }).catch(error =>{
-                            console.log("error deleting resource ", error);
-                            return task;
-                        })
+                   //db delete
+                   deleteTaskInDB(task);
                 }else{
                     return task;
                 }
