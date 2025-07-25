@@ -63,8 +63,9 @@ function App(){
     function addTask(name){
         const newTask = {id: `todo-${nanoid()}`, name, completed:false};
         axios.post('http://localhost:3000/addTask', {
+            component_id: newTask.id,
             Task: newTask.name,
-            Task_Type: "None", 
+            Task_Type: "None",
         }, {
             headers: {
                 'Content-Type': 'application/json',
