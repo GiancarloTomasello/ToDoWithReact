@@ -53,8 +53,8 @@ function App(){
         loadDBTasks();
     }, []);
     
-    async function addTask(name){
-        const newTask = {id: `todo-${nanoid()}`, name, completed:false};
+    async function addTask(taskData){
+        const newTask = {...taskData, id: `todo-${nanoid()}`};
         //Axios post
         await db.SaveNewTask(newTask)
         setTasks([...tasks, newTask]);        

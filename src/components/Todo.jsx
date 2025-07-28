@@ -29,6 +29,8 @@ function Todo(props) {
 
     //console.log(editButtonRef.current);
 
+    //TODO:Need to update to display duedate and taskType
+    //TODO:Need to be able to edit due date or task type
     const editingTemplate = (
         <form className="stack-small" onSubmit={handleSubmit}>
             <div className="form-group">

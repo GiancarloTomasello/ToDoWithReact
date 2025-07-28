@@ -14,7 +14,8 @@ export async function SaveNewTask(newTask){
     axios.post('http://localhost:3000/addTask', {
             component_id: newTask.id,
             Task: newTask.name,
-            Task_Type: "None",
+            Task_Type: newTask.taskType,
+            Due_Date: newTask.dueDate,
         }, {
             headers: {
                 'Content-Type': 'application/json',

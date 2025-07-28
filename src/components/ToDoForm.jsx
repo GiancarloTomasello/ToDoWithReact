@@ -16,7 +16,16 @@ function ToDoForm(props){
 
     function handleSubmit(event){
         event.preventDefault();
-        props.addTask(name);
+
+        const formData = new FormData(event.target);
+        const taskData = {
+            name: formData.get("text").toString(),
+            taskType: formData.get("taskType").toString(),
+            dueDate: formData.get("dueDate").toString(),
+        }
+        console.log(taskData);
+
+        props.addTask(taskData);
         setName("");
     }
 
@@ -29,7 +38,7 @@ function ToDoForm(props){
     }
 
     return(
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} id="newTaskForm">
             <h2 className="label-wrapper">
                 <label htmlFor="new-todo-input" className="label__lg">
                     What needs to be done?
@@ -52,7 +61,7 @@ function ToDoForm(props){
                         type="date"
                         id="new-todo-due-date"
                         className="input input_lg"
-                        name="due-date"
+                        name="dueDate"
                         value={selectedDate}
                         min={getCurrentDate()}
                         onChange={handleDateChange}
@@ -61,7 +70,7 @@ function ToDoForm(props){
                 </div>
                 <div>
                 <label>Task Type: </label>
-                <select className="input input__md" required>
+                <select className="input input__md" name="taskType" required>
                     <option value="None">None</option>
                     <option value="work">Work</option>
                     <option value="personal">Personal</option>
