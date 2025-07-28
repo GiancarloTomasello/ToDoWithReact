@@ -28,7 +28,29 @@ function ToDoForm(props){
                 autoComplete="off"
                 value={name}
                 onChange={handleChange}
+            />
+            <div className="flexbxMd">
+                <div>
+                    <label>Due Date:</label>
+                    <input
+                        type="date"
+                        id="new-todo-due-date"
+                        className="input input_lg"
+                        name="due-date"
+                        value={"2025-07-28"}
+                        min={"2025-07-28"}
                 />
+                </div>
+                <div>
+                <label>Task Type: </label>
+                <select className="input input__md">
+                    <option value="">None</option>
+                    <option value="work">Work</option>
+                    <option value="personal">Personal</option>
+                    <option value="Hobby">Hobby</option>
+                </select>
+                </div>
+            </div>
             <button type="submit" className="btn btn_primary btn__lg">
                 Add
             </button>
