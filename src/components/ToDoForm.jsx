@@ -3,6 +3,17 @@ import { useState } from "react";
 function ToDoForm(props){
     const [name, setName] = useState("");
 
+    //Get todays date and initialized selected date of form
+
+    const [selectedDate, setSelectedDate] = useState("");
+
+    function getCurrentDate(){
+        const date = new Date();
+        let currentDate = date.toJSON();
+        console.log(currentDate.slice(0,10));
+        return currentDate.slice(0,10);
+    }
+
     function handleSubmit(event){
         event.preventDefault();
         props.addTask(name);
@@ -11,6 +22,10 @@ function ToDoForm(props){
 
     function handleChange(event){
         setName(event.target.value);
+    }
+
+    function handleDateChange(event){
+        setSelectedDate(event.target.value);
     }
 
     return(
@@ -28,6 +43,7 @@ function ToDoForm(props){
                 autoComplete="off"
                 value={name}
                 onChange={handleChange}
+                required
             />
             <div className="flexbxMd">
                 <div>
@@ -37,14 +53,16 @@ function ToDoForm(props){
                         id="new-todo-due-date"
                         className="input input_lg"
                         name="due-date"
-                        value={"2025-07-28"}
-                        min={"2025-07-28"}
+                        value={selectedDate}
+                        min={getCurrentDate()}
+                        onChange={handleDateChange}
+                        required
                 />
                 </div>
                 <div>
                 <label>Task Type: </label>
-                <select className="input input__md">
-                    <option value="">None</option>
+                <select className="input input__md" required>
+                    <option value="None">None</option>
                     <option value="work">Work</option>
                     <option value="personal">Personal</option>
                     <option value="Hobby">Hobby</option>
