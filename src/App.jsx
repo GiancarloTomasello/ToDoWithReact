@@ -91,11 +91,13 @@ function App(){
             setTasks(remainingTasks);
         }
         
-        function editTask(id, newName){
+        function editTask(taskData){
             const updatedTasks = tasks.map((task) => {
-                if(id === task.id){
+                if(taskData.id === task.id){
                     //db updateTask
-                    task.name = newName;
+                    task.name = taskData.name;
+                    task.taskType = taskData.taskType;
+                    task.dueDate = taskData.dueDate;
                     db.updateTaskInDB(task);
                     return task;
                 }

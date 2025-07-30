@@ -49,7 +49,9 @@ export async function completeTaskInDB(task) {
 export async function updateTaskInDB(task){
     axios.put('http://localhost:3000/editTask', {
         databaseId: task.databaseId,
-        task: task.name
+        task: task.name,
+        task_type: task.taskType,
+        due_date: task.dueDate
     }, {
         headers: {
             'Content-Type': 'application/json',

@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import DateSelector from "./dateSelector";
+import TypeSelector from "./TypeSelector";
 
 function usePrevious(value){
     const ref = useRef();
@@ -22,7 +24,15 @@ function Todo(props) {
 
     function handleSubmit(e){
         e.preventDefault();
-        props.editTask(props.id, newName);
+
+        const formData = new FormData(e.target);
+        const taskData = {
+            id: props.id,
+            name: formData.get("text").toString(),
+            taskType: formData.get("taskType").toString(),
+            dueDate: formData.get("dueDate").toString(),
+        }
+        props.editTask(taskData);
         setNewName("");
         setEditing(false);
     }
@@ -34,21 +44,22 @@ function Todo(props) {
     const editingTemplate = (
         <form className="stack-small" onSubmit={handleSubmit}>
             <div className="form-group">
-            <label className="todo-label" htmlFor={props.id}>
-                New name for {props.name}
-            </label>
-            <input 
-                id={props.id} 
-                className="todo-text" 
-                type="text" 
-                value={newName}
-                onChange={handleChange}
-                ref={editFieldRef}
-            />
+                <label className="todo-label" htmlFor={props.id}>
+                    New name for {props.name}
+                </label>
+                <input 
+                    id={props.id} 
+                    className="todo-text" 
+                    type="text"
+                    name="text" 
+                    value={newName}
+                    onChange={handleChange}
+                    ref={editFieldRef}
+                />
             </div>
-            <div>
-                <input>
-                </input>
+            <div className="flexbxMd">
+                <DateSelector/>
+                <TypeSelector/>
             </div>
             <div className="btn-group">
             <button type="button" className="btn todo-cancel" onClick={() => setEditing(false)}>
@@ -75,9 +86,9 @@ function Todo(props) {
                 {props.name}
                 </label>
             </div>
-            <div>
+            <div className="flexbxMd">
                 <label htmlFor={props.id}>
-                Due Date: {props.dueDate}
+                    {props.dueDate ? "Due Date: " + props.dueDate : "Due Date: None"}
                 </label>
                 <label>
                 Task Type: {props.taskType}

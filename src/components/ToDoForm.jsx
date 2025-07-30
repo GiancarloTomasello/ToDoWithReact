@@ -44,12 +44,8 @@ function ToDoForm(props){
                 required
             />
             <div className="flexbxMd">
-                <div>
-                    <DateSelector/>
-                </div>
-                <div>
-                    <TypeSelector/>
-                </div>
+                <DateSelector/>
+                <TypeSelector/>
             </div>
             <button type="submit" className="btn btn_primary btn__lg">
                 Add
