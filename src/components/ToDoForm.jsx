@@ -1,18 +1,11 @@
 import { useState } from "react";
+import DateSelector from "./dateSelector";
+import TypeSelector from "./TypeSelector";
 
 function ToDoForm(props){
     const [name, setName] = useState("");
 
     //Get todays date and initialized selected date of form
-
-    const [selectedDate, setSelectedDate] = useState("");
-
-    function getCurrentDate(){
-        const date = new Date();
-        let currentDate = date.toJSON();
-        console.log(currentDate.slice(0,10));
-        return currentDate.slice(0,10);
-    }
 
     function handleSubmit(event){
         event.preventDefault();
@@ -31,10 +24,6 @@ function ToDoForm(props){
 
     function handleChange(event){
         setName(event.target.value);
-    }
-
-    function handleDateChange(event){
-        setSelectedDate(event.target.value);
     }
 
     return(
@@ -56,26 +45,10 @@ function ToDoForm(props){
             />
             <div className="flexbxMd">
                 <div>
-                    <label>Due Date:</label>
-                    <input
-                        type="date"
-                        id="new-todo-due-date"
-                        className="input input_lg"
-                        name="dueDate"
-                        value={selectedDate}
-                        min={getCurrentDate()}
-                        onChange={handleDateChange}
-                        required
-                />
+                    <DateSelector/>
                 </div>
                 <div>
-                <label>Task Type: </label>
-                <select className="input input__md" name="taskType" required>
-                    <option value="None">None</option>
-                    <option value="work">Work</option>
-                    <option value="personal">Personal</option>
-                    <option value="Hobby">Hobby</option>
-                </select>
+                    <TypeSelector/>
                 </div>
             </div>
             <button type="submit" className="btn btn_primary btn__lg">

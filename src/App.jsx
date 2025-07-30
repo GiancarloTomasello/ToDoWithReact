@@ -41,7 +41,8 @@ function App(){
                     id: dbTask.component_id,
                     databaseId: dbTask.todo_id,
                     name: dbTask.task,
-                    task_type: dbTask.task_type,
+                    dueDate: dbTask.due_date ? dbTask.due_date.slice(0,10) : dbTask.due_date,
+                    taskType: dbTask.task_type,
                     completed: dbTask.completed
                 }
                 return task;
@@ -108,7 +109,9 @@ function App(){
         .map((task) =>  (
             <Todo 
             id={task.id} 
-            name={task.name} 
+            name={task.name}
+            dueDate={task.dueDate}
+            taskType={task.taskType} 
             completed={task.completed}
             key={task.id}
             toggleTaskCompleted={toggleTaskCompleted}

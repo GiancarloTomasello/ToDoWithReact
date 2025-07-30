@@ -46,6 +46,10 @@ function Todo(props) {
                 ref={editFieldRef}
             />
             </div>
+            <div>
+                <input>
+                </input>
+            </div>
             <div className="btn-group">
             <button type="button" className="btn todo-cancel" onClick={() => setEditing(false)}>
                 Cancel
@@ -69,6 +73,14 @@ function Todo(props) {
                 />
                 <label className="todo-label" htmlFor={props.id}>
                 {props.name}
+                </label>
+            </div>
+            <div>
+                <label htmlFor={props.id}>
+                Due Date: {props.dueDate}
+                </label>
+                <label>
+                Task Type: {props.taskType}
                 </label>
             </div>
             <div className="btn-group">
