@@ -1,12 +1,10 @@
-# React + Vite
+# TODO App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+For this project, I decided to build upon the starter React To-Do application available from Mozilla's developer site, MDN Web Docs. Initially, the project would allow you to create tasks for a to-do list, edit a selected task, and complete a selected task, all within the web browser. The application had a simple filtering method that could be switched between showing all tasks, tasks that were not completed, and tasks that were completed. These newly added and edited tasks were not saved anywhere in the base code, so they existed temporarily or until the user refreshed the page. To build upon the established framework, I chose to add two features to the project: the ability to preserve the task created or edited by the user and the ability to add more detail to tasks in the form of due date and task type. To keep the project organized, I created two repositories to store my data. This repository holds all the front-end code, while I used [a secondary repository](https://github.com/GiancarloTomasello/ToDoWithReact_Backend#) to hold the back-end api code I created, which handles the persistent data. 
 
-Currently, two official plugins are available:
+## Preserving Data
+For the challenge of preserving data, I first started with utilizing the local state to hold a list of names of all the current tasks the user had created, but when I decided to add the additional filtering for due dates and task type, I found this method to be limited for making changes to specific tasks' data. After using local state, I switched over to creating a MySQL database and created a simple database table to hold all the data associated with each task. To facilitate all the user interactions, I used AXIOS on the front end to structure calls to an api and retrieve the data once the database call was resolved. For the back end, I used Express to create the different routes that were to be used to handle the application request for the various CRUD methods. I was able to quickly iterate and test these endpoints with the use of Postman's easy to use interface. With the MySQL database created and the API routes set up, the user was now able to retrieve previously created to-do tasks, persist any changes to to-do task information, and delete tasks they no longer wanted to keep.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Additional Filtering
+For adding the additional filters, the main obstacle I faced was to redesign the UI to best showcase both the due date and the task type without overcrowding any element. What helped to simplify this process was to create a paper prototype, which allowed me to iterate over a few different designs to determine a layout that would accomplish my goal. Thanks to my time spent on the paper prototype step, I am happy with how the changes I made to both the to-do task element as well as the task creation form.
